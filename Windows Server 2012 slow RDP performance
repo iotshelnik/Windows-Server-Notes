@@ -1,0 +1,49 @@
+Windows Server 2012 slow RDP performance 
+
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+Right-click on the right side, and add a new DWORD (32-bit) Value
+Set the value name to DisableTaskOffload and the value data to 1
+
+
+Open Network Connections.
+Right-click the icon of the Network card and select Properties.
+In Networking tab, click Configure… button.
+In the next window, switch to Advanced tab.
+Click the Large Send Offload Version 2 (IPv4) and change the value to Disabled.
+
+
+gpedit.msc > Computer Config > Windows Settings > Administrative Templates > Windows Components > 
+Remote Desktop Services > Remote Desktop Session Host > Connections > Select RDP transport protocol = Use only TCP
+
+
+Task Scheduler > Task Scheduler Library > Microsoft > Windows > Application Experience
+Right click = Disable
+
+
+Services > Smart Card Enumeration Service = Disable
+
+
+gpedit.msc > Computer > Windows > Security > Local policies > Parameters 
+Microsoft Network Server: Digitally Sign Communications = Disable
+
+
+#### And a solution from here:
+https://learn.microsoft.com/nl-NL/troubleshoot/windows-server/performance/sbsl-issue-create-rdp-connection-to-computer
+
+Make the registry change, follow these steps:
+
+    1. Start the Registry Editor. (Press the Windows logo key + R, type regedit.exe in the Open box, and then click OK.)
+
+    2. In registry editor, find and click one of the following registry subkeys:
+        HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows NT\Terminal Services
+        HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Terminal Server\WinStations\<Connection Name>
+
+    3. From the Edit menu, select New, and then select DWORD value.
+
+    4. Type fQueryUserConfigFromLocalMachine.
+
+    5. Hold down fQueryUserConfigFromLocalMachine (or right-click fQueryUserFigFromLocalMachine and select Change).
+
+    6. Type 1 in the Value Data box and select OK.
+
+    7. Close the Registry Editor.
